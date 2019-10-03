@@ -289,6 +289,14 @@ class IPythonHandler(AuthenticatedHandler):
         return self.settings['config_manager']
 
     #---------------------------------------------------------------
+    # Handler
+    #---------------------------------------------------------------
+
+    @property
+    def metric_generator(self):
+        return self.settings['metric_generator']
+
+    #---------------------------------------------------------------
     # CORS
     #---------------------------------------------------------------
     

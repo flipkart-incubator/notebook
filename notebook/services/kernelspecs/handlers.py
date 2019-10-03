@@ -81,11 +81,19 @@ class KernelSpecHandler(APIHandler):
         self.finish(json.dumps(model))
 
 
+class HealthCheckHandler(APIHandler):
+    @web.authenticated
+    def get(self):
+        mg = self.metric_generator
+        self.set_header("Content-Type", 'application/json')
+        self.finish(json.dumps(mg.generate_metrics()))
+
 # URL to handler mappings
 
 kernel_name_regex = r"(?P<kernel_name>[\w\.\-%]+)"
 
 default_handlers = [
     (r"/api/kernelspecs", MainKernelSpecHandler),
+    (r"/api/healthcheck", HealthCheckHandler),
     (r"/api/kernelspecs/%s" % kernel_name_regex, KernelSpecHandler),
 ]
