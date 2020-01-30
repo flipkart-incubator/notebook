@@ -44,7 +44,11 @@ class MainKernelHandler(APIHandler):
         else:
             model.setdefault('name', km.default_kernel_name)
 
-        kernel_id = yield gen.maybe_future(km.start_kernel(kernel_name=model['name']))
+        if 'custom_kernel_id' in model:
+            kernel_id = yield gen.maybe_future(
+                km.start_kernel(kernel_name=model['name'], custom_kernel_id=model['custom_kernel_id']))
+        else:
+            kernel_id = yield gen.maybe_future(km.start_kernel(kernel_name=model['name']))
         model = km.kernel_model(kernel_id)
         location = url_path_join(self.base_url, 'api', 'kernels', url_escape(kernel_id))
         self.set_header('Location', location)
@@ -66,6 +70,18 @@ class KernelHandler(APIHandler):
     def delete(self, kernel_id):
         km = self.kernel_manager
         yield gen.maybe_future(km.shutdown_kernel(kernel_id))
+        self.set_status(204)
+        self.finish()
+
+
+class KernelsShutdownHandler(APIHandler):
+
+    @web.authenticated
+    @gen.coroutine
+    def delete(self, user_name):
+        km = self.kernel_manager
+        print("Coming in Kernels shutdown handler Vikas")
+        yield gen.maybe_future(km.shutdown_kernels_by_username(user_name))
         self.set_status(204)
         self.finish()
 
@@ -484,10 +500,12 @@ class ZMQChannelsHandler(AuthenticatedZMQStreamHandler):
 
 _kernel_id_regex = r"(?P<kernel_id>\w+-\w+-\w+-\w+-\w+)"
 _kernel_action_regex = r"(?P<action>restart|interrupt)"
+_user_name_regex = r"(?P<user_name>[\w\.]+)"
 
 default_handlers = [
     (r"/api/kernels", MainKernelHandler),
     (r"/api/kernels/%s" % _kernel_id_regex, KernelHandler),
+    (r"/api/kernels/shutdown/%s" % _user_name_regex, KernelsShutdownHandler),
     (r"/api/kernels/%s/%s" % (_kernel_id_regex, _kernel_action_regex), KernelActionHandler),
     (r"/api/kernels/%s/channels" % _kernel_id_regex, ZMQChannelsHandler),
 ]
