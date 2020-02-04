@@ -280,6 +280,17 @@ class MappingKernelManager(MultiKernelManager):
         self.last_kernel_activity = utcnow()
         return super(MappingKernelManager, self).shutdown_kernel(kernel_id, now=now)
 
+    def shutdown_kernels_by_username(self, user_name, now=False):
+        """Shutdown all kernels for a specific user"""
+        kernel_id_list = []
+        for kernel_id in self._kernels:
+            if self._kernels[kernel_id].user_overrides["KERNEL_USERNAME"]==user_name:
+                kernel_id_list.append(kernel_id)
+
+        for kernel_id in kernel_id_list:
+            self.shutdown_kernel(kernel_id, now)
+        return
+
     @gen.coroutine
     def restart_kernel(self, kernel_id):
         """Restart a kernel by kernel_id"""

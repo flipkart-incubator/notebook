@@ -94,6 +94,23 @@ for more information.
         'terminado>=0.8.1',
         'prometheus_client'
     ],
+    setup_requires=[
+        'jinja2',
+        'tornado>=4.1,<7',
+        # pyzmq>=17 is not technically necessary,
+        # but hopefully avoids incompatibilities with Tornado 5. April 2018
+        'pyzmq>=17',
+        'ipython_genutils',
+        'traitlets>=4.2.1',
+        'jupyter_core>=4.4.0',
+        'jupyter_client>=5.2.0',
+        'nbformat',
+        'nbconvert',
+        'ipykernel',  # bless IPython kernel for now
+        'Send2Trash',
+        'terminado>=0.8.1',
+        'prometheus_client'
+    ],
     extras_require = {
         ':python_version == "2.7"': ['ipaddress'],
         'test:python_version == "2.7"': ['mock'],
