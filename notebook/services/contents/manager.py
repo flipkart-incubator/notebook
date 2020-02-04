@@ -391,6 +391,10 @@ class ContentsManager(LoggingConfigurable):
         
         name = self.increment_filename(untitled + ext, path, insert=insert)
         path = u'{0}/{1}'.format(path, name)
+
+        # MLP - To identify new notebooks
+        model['new_untitled'] = 'yes'
+
         return self.new(model, path)
     
     def new(self, model=None, path=''):
