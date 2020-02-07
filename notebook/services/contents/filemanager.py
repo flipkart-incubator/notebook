@@ -469,8 +469,8 @@ class FileContentsManager(FileManagerMixin, ContentsManager):
                 nb = nbformat.from_dict(model['content'])
 
                 # MLP - To identify new notebooks
-                if model.get('new_untitled', 'no') == 'yes':
-                    nb['new_untitled'] = 'yes'
+                if model.get('new_untitled', False):
+                    nb['new_untitled'] = True
                     del model['new_untitled']
 
                 self.check_and_sign(nb, path)

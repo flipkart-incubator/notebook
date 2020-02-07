@@ -393,7 +393,7 @@ class ContentsManager(LoggingConfigurable):
         path = u'{0}/{1}'.format(path, name)
 
         # MLP - To identify new notebooks
-        model['new_untitled'] = 'yes'
+        model['new_untitled'] = True
 
         return self.new(model, path)
     
