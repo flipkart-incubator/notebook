@@ -467,6 +467,12 @@ class FileContentsManager(FileManagerMixin, ContentsManager):
         try:
             if model['type'] == 'notebook':
                 nb = nbformat.from_dict(model['content'])
+
+                # MLP - To identify new notebooks
+                if model.get('new_untitled', False):
+                    nb['new_untitled'] = True
+                    del model['new_untitled']
+
                 self.check_and_sign(nb, path)
                 self._save_notebook(os_path, nb)
                 # One checkpoint should always exist for notebooks.
