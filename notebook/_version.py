@@ -9,5 +9,5 @@ store the current version info of the notebook.
 
 # Next beta/alpha/rc release: The version number for beta is X.Y.ZbN **without dots**.
 
-version_info = (5, 7, 8,'dev',4)
+version_info = (5, 7, 9,'dev4')
 __version__ = '.'.join(map(str, version_info[:5])) + ''.join(version_info[5:])
